@@ -1,17 +1,51 @@
 import os
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.base_user import AbstractBaseUser
+from .managers import UserManager
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    objects = UserManager()
+    # notice the absence of a "Password field", that's built in.
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []  # Email & Password are required by default.
+
+    class Meta:
+        db_table = 'user'
+
+    def __str__(self):
+        return self.email
+
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email
 
 
 class Device(models.Model):
     mac_id = models.CharField(max_length=100, unique=True)
-    secret_key = models.CharField(max_length=8, unique=True)
+    secret_key = models.CharField(max_length=8, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     sold_date = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         db_table = 'device'
+
+    def save(self, *args, **kwargs):
+        self.secret_key = os.urandom(4).hex()
+        super(Device, self).save(*args, **kwargs)
 
 
 class Profile(models.Model):
