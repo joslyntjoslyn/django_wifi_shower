@@ -26,7 +26,7 @@ SECRET_KEY = 'dt+xk$w0_#uh&a+51ol-r_wo$67_1wxb0b0pezt891651m50e1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -130,5 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MQTT_USER = os.environ.get('MQTT_USER', '')
-MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD', '')
+MQTT_AUTH = {
+    'username': os.environ.get('MQTT_USER', ''),
+    'password': os.environ.get('MQTT_PASSWORD', '')
+}

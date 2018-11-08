@@ -51,37 +51,41 @@ class Device(models.Model):
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    preheat_cycle = models.FloatField(null=True, blank=True)
-    shower_cycle = models.FloatField(null=True, blank=True)
-    shower_temp = models.FloatField(null=True, blank=True)
-    old_shower_habits = models.FloatField(null=True, blank=True)
-    water_used = models.FloatField(null=True, blank=True)
-    water_saved = models.FloatField(null=True, blank=True)
-    challenge_level = models.FloatField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     last_shower_date = models.DateTimeField(null=True, blank=True)
+    old_shower_habits = models.FloatField(null=True, blank=True)
+    shower_cycle = models.FloatField(null=True, blank=True)
+    gallons_saved = models.FloatField(null=True, blank=True)
+    shower_temp = models.FloatField(null=True, blank=True)
+    challenge_level = models.FloatField(null=True, blank=True)
+    shower_count = models.IntegerField(default=0)
+    average_shower_time = models.FloatField(default=0)
+    aggregate_shower_savings = models.FloatField(default=0)
 
     class Meta:
         db_table = 'profile'
 
 
 class ShoweringData(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    device = models.ForeignKey(Device, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     # 0: norma1: challenge
     shower_mode = models.IntegerField(default=0)
     preheat_cycle = models.FloatField(null=True, blank=True)
-    shower_cycle = models.FloatField(null=True, blank=True)
     old_shower_habits = models.FloatField(null=True, blank=True)
-    water_used = models.FloatField(null=True, blank=True)
-    water_saved = models.FloatField(null=True, blank=True)
+    shower_cycle = models.FloatField(null=True, blank=True)
     shower_temp = models.FloatField(null=True, blank=True)
-    mixing_temp = models.FloatField(null=True, blank=True)
+    gallons_used = models.FloatField(null=True, blank=True)
+    gallons_saved = models.FloatField(null=True, blank=True)
+    average_shower_time = models.FloatField(null=True, blank=True)
+    aggregate_shower_savings = models.FloatField(null=True, blank=True)
+    average_shower_savings = models.FloatField(null=True, blank=True)
     challenge_level = models.FloatField(null=True, blank=True)
-    aggregate_water_used = models.FloatField(null=True, blank=True)
-    average_water_used = models.FloatField(null=True, blank=True)
+    challenge_time = models.FloatField(null=True, blank=True)
+    # False: started, True: ended
+    status = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'showering_data'

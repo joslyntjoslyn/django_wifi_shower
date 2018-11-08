@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Device, Profile, User
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
+
 class CustomUserAdmin(UserAdmin):
     # The forms to add and change user instances
 
@@ -34,12 +35,14 @@ class DeviceAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    fields = ('name', 'user', 'preheat_cycle', 'shower_cycle', 'shower_temp', 'old_shower_habits', 'water_used',
-              'water_saved', 'challenge_level', 'created_date', 'last_shower_date')
-    readonly_fields = ('preheat_cycle', 'shower_cycle', 'shower_temp', 'old_shower_habits', 'water_used',
-                       'water_saved', 'challenge_level', 'created_date', 'last_shower_date')
-    list_display = ('user', 'name', 'preheat_cycle', 'shower_cycle', 'shower_temp', 'old_shower_habits', 'water_used',
-                    'water_saved', 'challenge_level', 'created_date', 'last_shower_date')
+    fields = ('user', 'name', 'shower_cycle', 'old_shower_habits', 'gallons_saved', 'shower_temp', 'shower_count',
+              'average_shower_time', 'aggregate_shower_savings', 'challenge_level', 'created_date', 'last_shower_date')
+    readonly_fields = ('shower_cycle', 'old_shower_habits', 'gallons_saved', 'shower_temp', 'shower_count',
+                       'average_shower_time', 'aggregate_shower_savings', 'challenge_level', 'created_date',
+                       'last_shower_date')
+    list_display = ('user', 'name', 'shower_cycle', 'old_shower_habits', 'gallons_saved', 'shower_temp', 'shower_count',
+                    'average_shower_time', 'aggregate_shower_savings', 'challenge_level', 'created_date',
+                    'last_shower_date')
 
 
 admin.site.register(User, CustomUserAdmin)
